@@ -1,7 +1,9 @@
 import express from "express";
-import { send } from "express/lib/response";
+import morgan from "morgan";
 const app=express();
 const PORT=9000;
+
+const logger=morgan("dev");
 
 const gossipMiddleware = (req,res,next)=>{ //next 값이 있으면 미들웨어라 부름
     
@@ -22,6 +24,7 @@ const handleHome=(req,res)=>{ //컨트롤러
 };
 
 //글로벌 미들웨어
+app.use(logger)
 app.use(gossipMiddleware);//순서 중요 top to bottom
 app.use(privateMiddleware);
 app.get("/",handleHome);
