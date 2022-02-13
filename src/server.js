@@ -4,6 +4,20 @@ const app=express();
 const PORT=9000;
 
 const logger=morgan("dev");
+app.use(logger)
+const globalRouter = express.Router();
+const handleHome =(req,res)=> res.send("Home");
+const userRouter = express.Router();
+const handleEdit = (req,res) =>res.send("edituser");
+const videoRouter = express.Router();
+const handelwatch = (req,res)=> res.send("watch video");
+
+app.use("/",globalRouter);
+app.use("/users",userRouter);
+app.use("/video",videoRouter);
+globalRouter.get("/",handleHome);
+userRouter.get("/edit",handleEdit);
+videoRouter.get("/watch",handelwatch);
 
 const gossipMiddleware = (req,res,next)=>{ //next 값이 있으면 미들웨어라 부름
     
@@ -11,28 +25,12 @@ const gossipMiddleware = (req,res,next)=>{ //next 값이 있으면 미들웨어�
     next();
 };
 
-const privateMiddleware = (req,res,next)=>{
-    const url=req.url;
-    if (url==="/protected"){ // 형까지 같을때
-        return res.send("<h1>Not allowed</h1>");
-    }
-    next();
-};
-
-const handleHome=(req,res)=>{ //컨트롤러
-    return res.send("i still love you");//텍스트 보내줌
-};
-
-//글로벌 미들웨어
-app.use(logger)
 app.use(gossipMiddleware);//순서 중요 top to bottom
-app.use(privateMiddleware);
-app.get("/",handleHome);
 
 
-app.get("/end",(requests,response)=>{
-    return response.end()//리퀘스트 종료
-})
+
+
+
 const listenServer=() =>
     console.log(`✅server listening on port http://localhost:${PORT}  `);
 app.listen(PORT,listenServer);
