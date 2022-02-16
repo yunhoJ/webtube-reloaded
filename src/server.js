@@ -7,6 +7,8 @@ const app=express();
 const PORT=9000;
 
 const logger=morgan("dev");
+app.set("view engine","pug") //퍼그를 view엔진으로 설정
+app.set("views",process.cwd()+"/src/views") //view의 경로를 src안으로 변경
 app.use(logger)
 
 
